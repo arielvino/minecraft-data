@@ -45,6 +45,21 @@ require('./version_iterator')(function (p, versionString) {
         })
       }
     })
+
+    // Sound IDs are indices into the wire protocol's sound_event registry, which is
+    // 0-indexed. Extraction has historically produced 1-indexed sounds.json (id 0
+    // missing, everything shifted +1), which makes consumers resolve every sound to the
+    // wrong name. The schema only enforces `minimum: 0`, so it can't catch this — assert
+    // ids form a contiguous 0..N-1 range.
+    const soundsFile = path.join(p, 'sounds.json')
+    if (fs.existsSync(soundsFile)) {
+      it('sounds.json is 0-indexed and contiguous', function () {
+        const sounds = require(soundsFile)
+        const ids = sounds.map(s => s.id)
+        const expected = ids.map((_, i) => i)
+        assert.deepStrictEqual(ids, expected, 'sound ids must be a contiguous range starting at 0 (0-indexed wire registry)')
+      })
+    }
   })
 })
 
