@@ -1152,6 +1152,14 @@
     ]
   },
   {
+    "name": "swingAnimationPacket",
+    "description": "Arm swings moved out of the animate packet into their own swing_animation packet (with the hand), and animate was renumbered: 0 wake up, 1 critical hit, 2 magic critical hit",
+    "versions": [
+      "26.3",
+      "latest"
+    ]
+  },
+  {
     "name": "tabCompleteHasAToolTip",
     "description": "tab complete has a tool tip",
     "versions": [
