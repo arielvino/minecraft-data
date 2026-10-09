@@ -32,17 +32,29 @@ function prepLines (raw) {
  * @returns {[Record<string,string>, Record<string,string>]}
  */
 function getEntityTypes (versionDir) {
-  const entityTypes = fs.readFileSync(`${versionDir}/client/net/minecraft/world/entity/EntityType.java`, 'utf8')
+  const entityDir = `${versionDir}/client/net/minecraft/world/entity`
+  // Since 26.3 the constants live in EntityTypes.java and register by an EntityTypeIds key
+  // instead of a string literal.
+  const split = fs.existsSync(`${entityDir}/EntityTypes.java`)
+  const entityTypes = fs.readFileSync(`${entityDir}/${split ? 'EntityTypes' : 'EntityType'}.java`, 'utf8')
   const entityTypesLines = prepLines(entityTypes)
+  const ids = {}
+  if (split) {
+    // public static final ResourceKey<EntityType<?>> ALLAY = create("allay");
+    const idsCode = fs.readFileSync(`${entityDir}/EntityTypeIds.java`, 'utf8')
+    for (const [, key, name] of idsCode.matchAll(/ ([A-Z0-9_]+) = create\("([a-z0-9_]+)"\)/g)) ids[key] = name
+  }
   const classNameTo = {}
   const nameToClass = {}
   for (const line of entityTypesLines) {
     if (line.includes('= register(')) {
       // Given the line: public static final EntityType<Allay> ALLAY = register( "allay", EntityType.Builder.<Allay>of(Allay::new, MobCategory.CREATURE).sized(0.35F, 0.6F).clientTrackingRange(8).updateInterval(2) );
-      // we extract Allay and "allay"
-      const regex = line.match(/EntityType<(.*)> (.*) = register\(\W*"([a-z0-9_]+)"/)
+      // we extract Allay and "allay". Since 26.3 the first argument is EntityTypeIds.ALLAY.
+      const regex = line.match(/EntityType<(.*)> (.*) = register\(\W*(?:"([a-z0-9_]+)"|EntityTypeIds\.([A-Z0-9_]+))/)
       if (regex) {
-        const [, type, , name] = regex
+        const [, type, , literal, idKey] = regex
+        const name = literal ?? ids[idKey]
+        if (!name) continue
         classNameTo[type] = name
         nameToClass[name] = type
       }

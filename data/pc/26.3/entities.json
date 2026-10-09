@@ -2974,7 +2974,7 @@
     "id": 107,
     "internalId": 107,
     "name": "poplar_chest_boat",
-    "displayName": "Poplar Chest Boat",
+    "displayName": "Poplar Boat with Chest",
     "width": 1.375,
     "height": 0.5625,
     "type": "other",
@@ -3688,7 +3688,7 @@
     "displayName": "Sulfur Cube",
     "width": 0.49,
     "height": 0.49,
-    "type": "mob",
+    "type": "passive",
     "category": "Hostile mobs",
     "metadataKeys": [
       "shared_flags",
@@ -4011,7 +4011,7 @@
       "age_locked",
       "unhappy_counter",
       "villager_data",
-      "villager_finalized"
+      "villager_data_finalized"
     ]
   },
   {
@@ -4427,7 +4427,7 @@
       "drowned_conversion",
       "converting",
       "villager_data",
-      "villager_finalized"
+      "villager_data_finalized"
     ]
   },
   {
