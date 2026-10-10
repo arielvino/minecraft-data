@@ -8083,16 +8083,16 @@
               "type": "varint"
             },
             {
+              "name": "onGround",
+              "type": "bool"
+            },
+            {
               "name": "yaw",
               "type": "i8"
             },
             {
               "name": "pitch",
               "type": "i8"
-            },
-            {
-              "name": "onGround",
-              "type": "bool"
             }
           ]
         ],
