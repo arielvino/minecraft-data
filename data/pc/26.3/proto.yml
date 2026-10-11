@@ -2559,11 +2559,12 @@
          pitch: f32
          weight: f32
    # MC: ClientboundMoveEntityPacket.Rot
+   # 26.3 writes onGround before the rotation (26.2 wrote it last).
    packet_entity_look:
       entityId: varint
+      onGround: bool
       yaw: i8
       pitch: i8
-      onGround: bool
    # MC: ClientboundMoveVehiclePacket
    packet_vehicle_move:
       x: f64
